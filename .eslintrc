@@ -1,0 +1,63 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true,
+    "mocha": true,
+    "jest": true,
+    "jasmine": true
+  },
+  "extends": [],
+  "rules": {
+    "prettier/prettier": "error",
+    "no-multiple-empty-lines": "error",
+    "sort-imports-es6-autofix/sort-imports-es6": [
+      "error",
+      {
+        "ignoreCase": false,
+        "ignoreMemberSort": false,
+        "memberSyntaxSortOrder": ["none", "all", "multiple", "single"]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": "**/*.js",
+      "parser": "babel-eslint",
+      "parserOptions": {
+        "sourceType": "module",
+        "ecmaVersion": 2018,
+        "ecmaFeatures": {
+          "experimentalObjectRestSpread": true,
+          "legacyDecorators": true,
+          "jsx": true
+        }
+      },
+      "extends": ["react-app", "prettier", "plugin:prettier/recommended"],
+      "plugins": ["sort-imports-es6-autofix"],
+      "rules": {
+        "no-restricted-globals": "warn"
+      }
+    },
+    {
+      "files": "**/*.{ts,tsx}",
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": "tsconfig.json",
+        "sourceType": "module",
+        "ecmaVersion": 2018
+      },
+      "plugins": [
+        "@typescript-eslint",
+        "@typescript-eslint/eslint-plugin",
+        "sort-imports-es6-autofix"
+      ],
+      "extends": ["react-app", "prettier", "plugin:prettier/recommended"],
+      "rules": {
+        "jsx-a11y/anchor-is-valid": "off",
+        "react/jsx-uses-react": "off",
+        "react/react-in-jsx-scope": "off"
+      }
+    }
+  ]
+}
