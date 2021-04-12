@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <div>hello</div>
+  <div id="progress"></div>
+  <img />
+  <script>
+    const url = '/2.jpg';
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      console.log(this.response);
+    };
+    // 文件大的时候，onload 要一直等文件下载完才会执行
+    xhr.responseType = 'blob';
+    xhr.open('get', url, true);
+    xhr.send();
+  </script>
+  <script>
+    const img = document.getElementsByTagName('img')[0];
+    const pgs = document.getElementById('progress');
+    fetch(`http://localhost:8000/${url}`, {
+      method: 'get',
+    }).then(async (rs) => {
+      const reader = rs.body.getReader();
+      const size = +rs.headers.get('Content-Length');
+      const chunks = new Uint8Array(size)
+      let receivedSize = 0;
+
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) {
+          break;
+        }
+
+        chunks.set(value, receivedSize);
+        receivedSize += value.length;
+
+        const content = `进度：${~~(receivedSize / size * 100)}%`;
+        pgs.innerHTML = content;
+      }
+
+      const src = URL.createObjectURL(new Blob([chunks.buffer]));
+      img.src = src;
+    });
+  </script>
+</body>
+
+</html>
